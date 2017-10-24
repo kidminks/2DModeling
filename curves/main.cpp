@@ -1,6 +1,7 @@
 #include <iostream>
 #include <graphics.h>
 #include <cmath>
+#include <string>
 using namespace std;
 #define PI 3.14159265
 
@@ -134,6 +135,12 @@ void editHermiteCurve(point p[], tangent t[]){
 int main()
 {
     initwindow(1525,800);
+    outtextxy(10,10,"Mark two points using mouse");
+    outtextxy(500,10,"Use a and d to rotate tangent from first point");
+    outtextxy(10,30,"Use w and s to increase or decrease tangent from first point");
+    outtextxy(500,30,"Use up and down to increase or decrease tangent from second point");
+    outtextxy(10,50,"Use left and right to rotate tangent from second point");
+    outtextxy(500,50,"Green line represent tangent :P");
     point p[3];
     tangent t[3];
     t[0].x = 0;
