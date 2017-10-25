@@ -37,10 +37,10 @@ private:
     tangent t[3];
     void marker(int color){
         setcolor(color);
-        putpixel(p[0].x,p[0].y,color);
-        putpixel(p[1].x,p[1].y,color);
-        line(p[0].x,p[0].y,p[0].x+t[0].x/2,p[0].y+t[0].y/2);
-        line(p[1].x,p[1].y,p[1].x+t[1].x/2,p[1].y+t[1].y/2);
+        circle(p[0].x,p[0].y,3);
+        circle(p[1].x,p[1].y,3);
+        line(p[0].x,p[0].y,p[0].x+t[0].x,p[0].y+t[0].y);
+        line(p[1].x,p[1].y,p[1].x+t[1].x,p[1].y+t[1].y);
         setcolor(WHITE);
     }
     void getPoints(){
@@ -50,8 +50,10 @@ private:
             }
             getmouseclick(WM_LBUTTONDOWN,x,y);
             p[c].x=x;p[c].y=y;
+            circle(x,y,3);
             c+=1;
         }
+        marker(BLACK);
     }
     double calculateTheta(){
         double pro = (p[1].y-p[0].y)/(p[1].x-p[0].x);
@@ -72,6 +74,7 @@ private:
         }
     }
     void editHermiteCurve(){
+        makeHermiteCurve(15);
         while(true){
             if(kbhit){
                 char c = getch();
@@ -129,22 +132,38 @@ private:
             }
         }
     }
-public:
-    void start(){
+    void writeText(int color){
+        setcolor(color);
         outtextxy(10,10,"Mark two points using mouse");
         outtextxy(500,10,"Use a and d to rotate tangent from first point");
         outtextxy(10,30,"Use w and s to increase or decrease tangent from first point");
         outtextxy(500,30,"Use up and down to increase or decrease tangent from second point");
         outtextxy(10,50,"Use left and right to rotate tangent from second point");
         outtextxy(500,50,"Green line represent tangent :P");
+        setcolor(WHITE);
+    }
+public:
+    void make(int color){
+        makeHermiteCurve(color);
+    }
+    void edit(){
+        editHermiteCurve();
+        marker(BLACK);
+    }
+    void start(){
+        writeText(WHITE);
         t[0].x = 0;
         t[0].y = 0;
         t[1].x = 0;
         t[1].y = 0;
         getPoints();
         t[0].theta = t[1].theta = calculateTheta();
-        makeHermiteCurve(15);
+        makeHermiteCurve(WHITE);
+        marker(GREEN);
         editHermiteCurve();
+        makeHermiteCurve(0);
+        marker(BLACK);
+        writeText(BLACK);
     }
 };
 

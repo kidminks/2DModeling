@@ -19,11 +19,11 @@ private:
             if(i==t){
                 continue;
             }
-            circle(p[i].x,p[i].y,2);
+            circle(p[i].x,p[i].y,3);
         }
         if(t<4&&t>=0){
             setcolor(RED);
-            circle(p[t].x,p[t].y,2);
+            circle(p[t].x,p[t].y,3);
         }
         setcolor(WHITE);
     }
@@ -34,8 +34,10 @@ private:
             }
             getmouseclick(WM_LBUTTONDOWN,x,y);
             p[c].x=x;p[c].y=y;
+            circle(x,y,3);
             c+=1;
         }
+        markPoints(BLACK,-10);
     }
     void makeBezierCurve(int color){
         point r[5];
@@ -75,6 +77,7 @@ private:
         }
     }
     void editBezierCurve(){
+        markPoints(GREEN,-10);
         while(true){
             if(kbhit){
                 char c = getch();
@@ -88,16 +91,31 @@ private:
             }
         }
     }
-public:
-    void start(){
+    void writeText(int color){
+        setcolor(color);
         outtextxy(10,10,"Mark four points using mouse");
         outtextxy(500,10,"Use 0 to 3 to choose the point");
         outtextxy(10,30,"Use arrow key to control after that");
         outtextxy(500,30,"Use b to exit the current state");
+        setcolor(WHITE);
+    }
+public:
+    void make(int color){
+        makeBezierCurve(color);
+    }
+    void edit(){
+        editBezierCurve();
+        makeBezierCurve(BLACK);
+        markPoints(BLACK,-10);
+    }
+    void start(){
+        writeText(WHITE);
         getPoints();
         makeBezierCurve(WHITE);
-        markPoints(GREEN,-10);
         editBezierCurve();
+        makeBezierCurve(BLACK);
+        markPoints(BLACK,-10);
+        writeText(BLACK);
     }
 
 };
