@@ -75,61 +75,63 @@ private:
     }
     void editHermiteCurve(){
         makeHermiteCurve(15);
-        while(true){
-            if(kbhit){
-                char c = getch();
-                if(c=='b'){
-                    return;
-                }
-                makeHermiteCurve(0);
-                marker(BLACK);
-                if(c=='w'){
-                    t[0].x += 1;
-                    t[0].y += tan(t[0].theta*PI/180.0);
-                }
-                else if(c=='s'){
-                    t[0].x -= 1;
-                    t[0].y -= tan(t[0].theta*PI/180.0);
-                }
-                else if(c==KEY_UP){
-                    t[1].x += 1;
-                    t[1].y += tan(t[1].theta*PI/180.0);;
-                }
-                else if(c==KEY_DOWN){
-                    t[1].x -= 1;
-                    t[1].y -= tan(t[1].theta*PI/180.0);;
-                }
-                else if(c=='a'){
-                    t[0].theta = t[0].theta+1;
-                    if(t[0].theta==361){
-                        t[0].theta = 0;
-                    }
-                    t[0] = rotation(t[0]);
-                }
-                else if(c=='d'){
-                    t[0].theta = t[0].theta-1.0;
-                    t[0] = rotation(t[0]);
-                    if(t[0].theta<=0){
-                        t[0].theta = 360-t[0].theta;
-                    }
-                }
-                else if(c==KEY_LEFT){
-                    t[1].theta = t[1].theta+1;
-                    if(t[1].theta==361){
-                        t[1].theta = 0;
-                    }
-                    t[1] = rotation(t[1]);
-                }
-                else if(c==KEY_RIGHT){
-                    t[1].theta = t[1].theta-1;
-                    t[1] = rotation(t[1]);
-                    if(t[1].theta<=0){
-                        t[1].theta = 360-t[1].theta;
-                    }
-                }
-                makeHermiteCurve(15);
-                marker(GREEN);
+        char c;
+        P:
+        while(!kbhit()){
+        }
+        c = getch();
+        if(c=='b'){
+            return;
+        }else{
+            makeHermiteCurve(0);
+            marker(BLACK);
+            if(c=='w'){
+                t[0].x += 1;
+                t[0].y += tan(t[0].theta*PI/180.0);
             }
+            else if(c=='s'){
+                t[0].x -= 1;
+                t[0].y -= tan(t[0].theta*PI/180.0);
+            }
+            else if(c==KEY_UP){
+                t[1].x += 1;
+                t[1].y += tan(t[1].theta*PI/180.0);;
+            }
+            else if(c==KEY_DOWN){
+                t[1].x -= 1;
+                t[1].y -= tan(t[1].theta*PI/180.0);;
+            }
+            else if(c=='a'){
+                t[0].theta = t[0].theta+1;
+                if(t[0].theta==361){
+                    t[0].theta = 0;
+                }
+                t[0] = rotation(t[0]);
+            }
+            else if(c=='d'){
+                t[0].theta = t[0].theta-1.0;
+                t[0] = rotation(t[0]);
+                if(t[0].theta<=0){
+                    t[0].theta = 360-t[0].theta;
+                }
+            }
+            else if(c==KEY_LEFT){
+                t[1].theta = t[1].theta+1;
+                if(t[1].theta==361){
+                    t[1].theta = 0;
+                }
+                t[1] = rotation(t[1]);
+            }
+            else if(c==KEY_RIGHT){
+                t[1].theta = t[1].theta-1;
+                t[1] = rotation(t[1]);
+                if(t[1].theta<=0){
+                    t[1].theta = 360-t[1].theta;
+                }
+            }
+            makeHermiteCurve(15);
+            marker(GREEN);
+            goto P;
         }
     }
     void writeText(int color){
@@ -149,6 +151,25 @@ public:
     void edit(){
         editHermiteCurve();
         marker(BLACK);
+    }
+    void save(ofstream* o){
+        *o<<2<<' ';
+        for(int i=0;i<2;i++){
+            *o<<p[i].x<<' '<<p[i].y<<' '<<t[i].x<<' '<<t[i].y<<' '<<t[i].theta<<' ';
+        }
+        *o<<'\n';
+    }
+    void pointForCurve(vector<double> v){
+        int k = 0;
+        for(int i=0;i<v.size();i += 5){
+            p[k].x = v[i];
+            p[k].y = v[i+1];
+            t[k].x = v[i+2];
+            t[k].y = v[i+3];
+            t[k].theta = v[i+4];
+            k += 1;
+        }
+        makeHermiteCurve(WHITE);
     }
     void start(){
         writeText(WHITE);
