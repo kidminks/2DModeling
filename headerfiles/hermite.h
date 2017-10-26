@@ -39,8 +39,8 @@ private:
         setcolor(color);
         circle(p[0].x,p[0].y,3);
         circle(p[1].x,p[1].y,3);
-        line(p[0].x,p[0].y,p[0].x+t[0].x,p[0].y+t[0].y);
-        line(p[1].x,p[1].y,p[1].x+t[1].x,p[1].y+t[1].y);
+        //line(p[0].x,p[0].y,p[0].x+t[0].x,p[0].y+t[0].y);
+        //line(p[1].x,p[1].y,p[1].x+t[1].x,p[1].y+t[1].y);
         setcolor(WHITE);
     }
     void getPoints(){

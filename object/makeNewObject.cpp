@@ -17,7 +17,7 @@ int main(){
     if(c=='r'){
         objectMaker.read();
     }
-    if(c>='1'&&c<='3'){
+    if(c>='1'&&c<='4'){
         objectMaker.start(c-'0');
     }
     if(c!='b'){

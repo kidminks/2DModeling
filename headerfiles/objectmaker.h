@@ -6,17 +6,20 @@
 #include <string>
 #include "bezier.h"
 #include "hermite.h"
+#include "imageRending.h"
 using namespace std;
-struct point{
-    double x,y;
-};
+
 class ObjectMaker{
 private:
     vector<Bezier> b;
     vector<Hermite> h;
+    vector<ImageRender> image;
     string saveLocation;
 
     void makeObject(int color){
+        for(int i=0;i<image.size();i++){
+            image[i].make(BLACK);
+        }
         for(int i=0;i<b.size();i++){
             b[i].make(color);
         }
@@ -35,6 +38,12 @@ private:
         Hermite hermite;
         hermite.start();
         h.push_back(hermite);
+        makeObject(WHITE);
+    }
+    void startImage() {
+        ImageRender imageRender;
+        imageRender.start();
+        image.push_back(imageRender);
         makeObject(WHITE);
     }
     void editCurve(){
@@ -97,12 +106,43 @@ private:
         if(editCurve!=-2){
             h[editCurve].edit();
         }
+        for(int i=0;i<image.size();i++){
+            image[i].make(BLACK);
+            image[i].make(GREEN);
+            I:
+            while(!kbhit()){
+            }
+            c = getch();
+            if(c=='b'){
+                return;
+            }
+            if(c==KEY_RIGHT){
+                image[i].make(BLACK);
+                image[i].make(WHITE);
+            }else if(c=='e'){
+                image[i].make(BLACK);
+                image[i].make(WHITE);
+                editCurve = i;
+                break;
+            }else if(c=='d'){
+                cleardevice();
+                image.erase(image.begin()+i);
+                makeObject(WHITE);
+            }else{
+                goto I;
+            }
+        }
+        if(editCurve!=-2){
+            image[editCurve].edit();
+            return;
+        }
     }
     void decide(int i){
         switch(i){
             case 1: startBerzier();break;
             case 2: startHermite();break;
-            case 3: editCurve();
+            case 3: startImage();break;
+            case 4: editCurve();break;
         }
     }
     void setSaveFile(){
@@ -119,7 +159,7 @@ public:
     }
     void writeText(int color){
         setcolor(color);
-        outtextxy(10,10,"Use 1 for Bezier 2 for Hermite and 3 to edit curve");
+        outtextxy(10,10,"Use 1 for Bezier 2 for Hermite and 3 to add image 4 to exit");
         outtextxy(10,30,"Use b to exit, s to save, r to read");
         outtextxy(10,50,"see terminal after pressing s or r");
         setcolor(WHITE);
@@ -135,6 +175,9 @@ public:
         }
         for(int i=0;i<h.size();i++){
             h[i].save(&o);
+        }
+        for(int i=0;i<image.size();i++){
+            image[i].save(&o);
         }
         cout<<"saved"<<endl;
     }
@@ -158,8 +201,7 @@ public:
                 }
                 bezier.pointForCurve(v);
                 b.push_back(bezier);
-            }
-            if(num==2.0){
+            }else if(num==2.0){
                 Hermite hermite;
                 v.clear();
                 for(int it=0;it<10;it++){
@@ -168,9 +210,22 @@ public:
                 }
                 hermite.pointForCurve(v);
                 h.push_back(hermite);
+            }else if(num==3.0){
+                ImageRender imageRender;
+                v.clear();
+                for(int it=0;it<4;it++){
+                    i >> num;
+                    v.push_back(num);
+                }
+                string s;
+                i >> s;
+                imageRender.pointForImage(v,s);
+                image.push_back(imageRender);
             }
         }
         cout<<"read"<<endl;
+        writeText(BLACK);
+        writeText(WHITE);
     }
     void start(int t){
             makeObject(WHITE);
