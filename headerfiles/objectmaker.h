@@ -2,6 +2,8 @@
 #define OBJECTMAKER_H_INCLUDED
 #include <fstream>
 #include <vector>
+#include <iostream>
+#include <string>
 #include "bezier.h"
 #include "hermite.h"
 using namespace std;
@@ -12,6 +14,8 @@ class ObjectMaker{
 private:
     vector<Bezier> b;
     vector<Hermite> h;
+    string saveLocation;
+
     void makeObject(int color){
         for(int i=0;i<b.size();i++){
             b[i].make(color);
@@ -39,6 +43,7 @@ private:
         for(int i=0;i<b.size();i++){
             b[i].make(BLACK);
             b[i].make(GREEN);
+            B:
             while(!kbhit()){
             }
             c = getch();
@@ -56,6 +61,8 @@ private:
             }else if(c=='d'){
                 b[i].make(BLACK);
                 b.erase(b.begin()+i);
+            }else{
+                goto B;
             }
         }
         if(editCurve!=-2){
@@ -65,6 +72,7 @@ private:
         for(int i=0;i<h.size();i++){
             h[i].make(BLACK);
             h[i].make(GREEN);
+            H:
             while(!kbhit()){
             }
             c = getch();
@@ -82,6 +90,8 @@ private:
             }else if(c=='d'){
                 h[i].make(BLACK);
                 h.erase(h.begin()+i);
+            }else{
+                goto H;
             }
         }
         if(editCurve!=-2){
@@ -95,26 +105,47 @@ private:
             case 3: editCurve();
         }
     }
+    void setSaveFile(){
+        string s,l="../saves/";
+        cout<<"Write file name :- ";
+        cin >> s;
+        s += ".txt";
+        saveLocation = l+s;
+        cout<<saveLocation<<' ';
+    }
 public:
+    ObjectMaker(){
+        saveLocation = "";
+    }
     void writeText(int color){
         setcolor(color);
         outtextxy(10,10,"Use 1 for Bezier 2 for Hermite and 3 to edit curve");
-        outtextxy(10,30,"Use b to exit and s to save");
+        outtextxy(10,30,"Use b to exit, s to save, r to read");
+        outtextxy(10,50,"see terminal after pressing s or r");
         setcolor(WHITE);
     }
     void save(){
         ofstream o;
-        o.open("input.txt",ios::out);
+        if(saveLocation==""){
+            setSaveFile();
+        }
+        o.open(saveLocation,ios::out);
         for(int i=0;i<b.size();i++){
             b[i].save(&o);
         }
         for(int i=0;i<h.size();i++){
             h[i].save(&o);
         }
+        cout<<"saved"<<endl;
     }
     void read(){
         ifstream i;
-        i.open("input.txt",ios::in);
+        string s,l="../saves/";
+        cout<<"Write file name (see saves directory):- ";
+        cin >> s;
+        s += ".txt";
+        cout<<s<<' ';
+        i.open(l+s,ios::in);
         double num = 0.0;
         vector<double> v;
         while(i >> num){
@@ -139,6 +170,7 @@ public:
                 h.push_back(hermite);
             }
         }
+        cout<<"read"<<endl;
     }
     void start(int t){
             makeObject(WHITE);
