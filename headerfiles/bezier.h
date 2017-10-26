@@ -116,6 +116,11 @@ public:
     void make(int color){
         makeBezierCurve(color);
     }
+    void translate(double x, double y){
+        for(int i=0;i<4;i++){
+            p[i].x += x;p[i].y += y;
+        }
+    }
     void save(ofstream* o){
         *o<<1<<' ';
         for(int i=0;i<4;i++){

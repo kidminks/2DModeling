@@ -148,6 +148,11 @@ public:
     void make(int color){
         makeHermiteCurve(color);
     }
+    void translate(double x, double y){
+        for(int i=0;i<2;i++){
+            p[i].x += x;p[i].y += y;
+        }
+    }
     void edit(){
         editHermiteCurve();
         marker(BLACK);

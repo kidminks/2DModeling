@@ -16,6 +16,14 @@ private:
     vector<ImageRender> image;
     string saveLocation;
 
+    void translate(double x,double y){
+        for(int i=0;i<b.size();i++){
+            b[i].translate(x,y);
+        }
+        for(int i=0;i<h.size();i++){
+            h[i].translate(x,y);
+        }
+    }
     void makeObject(int color){
         for(int i=0;i<image.size();i++){
             image[i].make(BLACK);
@@ -45,6 +53,27 @@ private:
         imageRender.start();
         image.push_back(imageRender);
         makeObject(WHITE);
+    }
+    void starttranslate(){
+        char c;
+        T:
+        while(!kbhit()){
+        }
+        c = getch();
+        makeObject(BLACK);
+        if(c==KEY_LEFT){
+            translate(-5.0,0);
+        }else if(c==KEY_RIGHT){
+            translate(5.0,0);
+        }else if(c==KEY_UP){
+            translate(0,-5.0);
+        }else if(c==KEY_DOWN){
+            translate(0,5.0);
+        }
+        makeObject(WHITE);
+        if(c!='b'){
+            goto T;
+        }
     }
     void editCurve(){
         int editCurve = -2;
@@ -143,6 +172,7 @@ private:
             case 2: startHermite();break;
             case 3: startImage();break;
             case 4: editCurve();break;
+            case 5: starttranslate();break;
         }
     }
     void setSaveFile(){
@@ -160,8 +190,9 @@ public:
     void writeText(int color){
         setcolor(color);
         outtextxy(10,10,"Use 1 for Bezier 2 for Hermite and 3 to add image 4 to edit");
-        outtextxy(10,30,"Use b to exit, s to save, r to read");
-        outtextxy(10,50,"see terminal after pressing s or r");
+        outtextxy(10,30,"5 to choose center point (use arrow keys)");
+        outtextxy(10,50,"Use b to exit, s to save, r to read");
+        outtextxy(10,70,"see terminal after pressing s or r");
         setcolor(WHITE);
     }
     void save(){
