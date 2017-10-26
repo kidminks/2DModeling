@@ -19,14 +19,7 @@ int main(){
         objectMaker.read();
     }
     if(c>='1'&&c<='4'){
-        int i = 0;
-        while(i<10){
-            objectMaker.make(BLACK);
-            Sleep(100);
-            objectMaker.make(WHITE);
-            i += 1;
-        }
-        //objectMaker.start(c-'0');
+        objectMaker.start(c-'0');
     }
     if(c!='b'){
         goto P;

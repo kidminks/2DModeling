@@ -59,7 +59,7 @@ private:
             double x = r[0].x+r[1].x+r[2].x+r[3].x;
             double y = r[0].y+r[1].y+r[2].y+r[3].y;
             putpixel(x,y,color);
-            time += 0.02;
+            time += 0.0225;
         }
     }
     void startEdit(int t){
