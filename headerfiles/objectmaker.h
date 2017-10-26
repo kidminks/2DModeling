@@ -159,7 +159,7 @@ public:
     }
     void writeText(int color){
         setcolor(color);
-        outtextxy(10,10,"Use 1 for Bezier 2 for Hermite and 3 to add image 4 to exit");
+        outtextxy(10,10,"Use 1 for Bezier 2 for Hermite and 3 to add image 4 to edit");
         outtextxy(10,30,"Use b to exit, s to save, r to read");
         outtextxy(10,50,"see terminal after pressing s or r");
         setcolor(WHITE);
@@ -192,7 +192,18 @@ public:
         double num = 0.0;
         vector<double> v;
         while(i >> num){
-            if(num==1.0){
+            if(num==3.0){
+                ImageRender imageRender;
+                v.clear();
+                for(int it=0;it<4;it++){
+                    i >> num;
+                    v.push_back(num);
+                }
+                string s;
+                i >> s;
+                imageRender.pointForImage(v,s);
+                image.push_back(imageRender);
+            }else if(num==1.0){
                 Bezier bezier;
                 v.clear();
                 for(int it=0;it<8;it++){
@@ -210,17 +221,6 @@ public:
                 }
                 hermite.pointForCurve(v);
                 h.push_back(hermite);
-            }else if(num==3.0){
-                ImageRender imageRender;
-                v.clear();
-                for(int it=0;it<4;it++){
-                    i >> num;
-                    v.push_back(num);
-                }
-                string s;
-                i >> s;
-                imageRender.pointForImage(v,s);
-                image.push_back(imageRender);
             }
         }
         cout<<"read"<<endl;
