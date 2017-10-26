@@ -1,10 +1,19 @@
 #ifndef BEZIER_H_INCLUDED
 #define BEZIER_H_INCLUDED
 
+#include <iostream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
 class Bezier{
 private:
     struct point{
         double x,y;
+    };
+    struct tangent{
+        double x,y;
+        double theta;
     };
     point mul(point p,double t){
         point r;
@@ -54,47 +63,51 @@ private:
         }
     }
     void startEdit(int t){
-        while(true){
-            if(kbhit){
-                char c = getch();
-                if(c=='b'){
-                    return;
-                }
-                makeBezierCurve(BLACK);
-                markPoints(BLACK,-10);
-                if(c==KEY_LEFT){
-                    p[t].x -= 1;
-                }else if(c==KEY_RIGHT){
-                    p[t].x += 1;
-                }else if(c==KEY_UP){
-                    p[t].y -= 1;
-                }else if(c==KEY_DOWN){
-                    p[t].y += 1;
-                }
-                makeBezierCurve(WHITE);
-                markPoints(GREEN,t);
+        char c;
+        P:
+        while(!kbhit()){
+        }
+        c = getch();
+        if(c=='b'){
+            return;
+        }else{
+            makeBezierCurve(BLACK);
+            markPoints(BLACK,-10);
+            if(c==KEY_LEFT){
+                p[t].x -= 1;
+            }else if(c==KEY_RIGHT){
+                p[t].x += 1;
+            }else if(c==KEY_UP){
+                p[t].y -= 1;
+            }else if(c==KEY_DOWN){
+                p[t].y += 1;
             }
+            makeBezierCurve(WHITE);
+            markPoints(GREEN,t);
+            goto P;
         }
     }
     void editBezierCurve(){
         markPoints(GREEN,-10);
-        while(true){
-            if(kbhit){
-                char c = getch();
-                if(c=='b'){
-                    return;
-                }
-                if(c>='0'&&c<='3'){
-                    int t = c-'0';
-                    startEdit(t);
-                }
-            }
+        char c;
+        P:
+        while(!kbhit()){
+        }
+        c = getch();
+        if(c=='b'){
+            return;
+        }else if(c>='1'&&c<='4'){
+            int t = (c-'0')-1;
+            startEdit(t);
+            goto P;
+        }else{
+            goto P;
         }
     }
     void writeText(int color){
         setcolor(color);
         outtextxy(10,10,"Mark four points using mouse");
-        outtextxy(500,10,"Use 0 to 3 to choose the point");
+        outtextxy(500,10,"Use 1 to 4 to choose the point");
         outtextxy(10,30,"Use arrow key to control after that");
         outtextxy(500,30,"Use b to exit the current state");
         setcolor(WHITE);
@@ -102,6 +115,22 @@ private:
 public:
     void make(int color){
         makeBezierCurve(color);
+    }
+    void save(ofstream* o){
+        *o<<1<<' ';
+        for(int i=0;i<4;i++){
+            *o<<p[i].x<<' '<<p[i].y<<' ';
+        }
+        *o<<'\n';
+    }
+    void pointForCurve(vector<double> v){
+        int k = 0;
+        for(int i=0;i<v.size();i += 2){
+            p[k].x = v[i];
+            p[k].y = v[i+1];
+            k += 1;
+        }
+        makeBezierCurve(WHITE);
     }
     void edit(){
         editBezierCurve();
