@@ -233,6 +233,9 @@ public:
             decide(t);
             writeText(WHITE);
     }
+    void make(int color){
+        makeObject(color);
+    }
 };
 
 #endif // OBJECTMAKER_H_INCLUDED
