@@ -1,7 +1,5 @@
 #include <iostream>
 #include <graphics.h>
-#include <fstream>
-#include <time.h>
 #include "../headerfiles/objectMaker.h"
 using namespace std;
 int main(){

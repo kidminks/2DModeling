@@ -121,6 +121,15 @@ public:
             p[i].x += x;p[i].y += y;
         }
     }
+    void mirror(double t, char s){
+        for(int i=0;i<4;i++){
+            if(s == 'x'){
+                p[i].x = t+(t-p[i].x);
+            }else if(s == 'y'){
+                p[i].y = t+(t-p[i].y);
+            }
+        }
+    }
     void save(ofstream* o){
         *o<<1<<' ';
         for(int i=0;i<4;i++){
